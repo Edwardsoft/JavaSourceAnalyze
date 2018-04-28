@@ -26,6 +26,9 @@
 package java.lang;
 
 /**
+ *
+ * 类Object是类层次中的的根，是每一个类的父类。所有的对象，包括数组，都实现了这个类的方法
+ *
  * Class {@code Object} is the root of the class hierarchy.
  * Every class has {@code Object} as a superclass. All objects,
  * including arrays, implement the methods of this class.
@@ -42,6 +45,12 @@ public class Object {
     }
 
     /**
+     *
+     * 返回这个对象的运行类，返回{@code类}对象是由所表示的类的{@code静态同步}方法锁定的对象。
+     * 
+     *
+     *
+     *
      * Returns the runtime class of this {@code Object}. The returned
      * {@code Class} object is the object that is locked by {@code
      * static synchronized} methods of the represented class.
