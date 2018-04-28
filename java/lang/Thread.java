@@ -43,9 +43,18 @@ import sun.security.util.SecurityConstants;
 
 
 /**
+ *
+ * 线程是程序中执行的线程。 Java虚拟机允许应用程序同时运行多个执行线程。
+ *
  * A <i>thread</i> is a thread of execution in a program. The Java
  * Virtual Machine allows an application to have multiple threads of
  * execution running concurrently.
+ * 
+ * 每一个线程都有一个优先级。高优先级的线程比低优先级的线程在执行上优先。
+ * 每个线程可能也可能不会被标记为守护进程。当在线程中运行的代码创建了一个新的Thread对象，
+ * 这个新的线程的初始化优先级会与创建它的线程一致，并且当且仅当创建其的线程为守护
+ * 进程时，这个线程才是守护线程
+ *
  * <p>
  * Every thread has a priority. Threads with higher priority are
  * executed in preference to threads with lower priority. Each thread
@@ -55,6 +64,12 @@ import sun.security.util.SecurityConstants;
  * creating thread, and is a daemon thread if and only if the
  * creating thread is a daemon.
  * <p>
+ * 
+ * 当一个Java虚拟机开启后，总是有一个非守护单线程（它通常调用一些指定类的main方法）
+ * Java虚拟机会继续执行线程直到以下的情况之一发生：
+ *     Runtime类的exit方法已经被调用并且安全管理器允许退出操作发生。
+ *     所有不是守护进程线程的线程都已经死了，要么从调用run方法中返回，要么抛出一个超出run方法传播的异常。
+ *
  * When a Java Virtual Machine starts up, there is usually a single
  * non-daemon thread (which typically calls the method named
  * <code>main</code> of some designated class). The Java Virtual
@@ -70,6 +85,45 @@ import sun.security.util.SecurityConstants;
  *     method.
  * </ul>
  * <p>
+ * 
+ * 有两种方法可以创建一个新的执行线程。 一种是将一个类声明为Thread的子类。 
+ * 这个子类应该重写Thread类的run方法。 然后可以分配和启动子类的一个实例。 
+ * 例如，计算大于所述值的素数的线程可以写成如下：
+ *     class PrimeThread extends Thread {
+ *         long minPrime;
+ *         PrimeThread(long minPrime) {
+ *             this.minPrime = minPrime;
+ *         }
+ *
+ *         public void run() {
+ *             // compute primes larger than minPrime
+ *             &nbsp;.&nbsp;.&nbsp;.
+ *         }
+ *     }
+ * 下面的代码可以创建一个线程并且开始运行：
+ *     PrimeThread p = new PrimeThread(143);
+ *     p.start();
+ * 
+ * 另一个创建线程的方法是声明一个实现了Runnable接口的类，这个类随后会实现run方法。
+ * 然后可以分配该类的一个实例，在创建线程时作为参数进行传递，然后启动。 这种其它风格的相同示例如下所示：
+ *     class PrimeRun implements Runnable {
+ *         long minPrime;
+ *         PrimeRun(long minPrime) {
+ *             this.minPrime = minPrime;
+ *         }
+ *
+ *         public void run() {
+ *             // compute primes larger than minPrime
+ *             &nbsp;.&nbsp;.&nbsp;.
+ *         }
+ *     } 
+ * 下面的代码可以创建一个线程并且开始运行：
+ *     PrimeRun p = new PrimeRun(143);
+ *     new Thread(p).start();
+ * 每个线程都有一个用于标识的名称。 多个线程可能具有相同的名称。 
+ * 如果在创建线程时未指定名称，则会为其生成新名称。
+ * 除非另有说明，否则将一个null参数传递给此类中的构造函数或方法将导致抛出 NullPointerException 异常。
+ *
  * There are two ways to create a new thread of execution. One is to
  * declare a class to be a subclass of <code>Thread</code>. This
  * subclass should override the <code>run</code> method of class
@@ -96,6 +150,16 @@ import sun.security.util.SecurityConstants;
  *     p.start();
  * </pre></blockquote>
  * <p>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * The other way to create a thread is to declare a class that
  * implements the <code>Runnable</code> interface. That class then
  * implements the <code>run</code> method. An instance of the class can
